@@ -97,6 +97,31 @@ namespace GradeBookTests
                 StreamReader standardInput = new StreamReader(Console.OpenStandardInput());
                 Console.SetIn(standardInput);
             }
+
+            output = string.Empty;
+
+            try
+            {
+                using (var consoleInputStream = new StringReader("close"))
+                {
+                    Console.SetIn(consoleInputStream);
+                    using (var consolestream = new StringWriter())
+                    {
+                        Console.SetOut(consolestream);
+                        StartingUserInterface.CreateCommand("create test standard true");
+                        output = consolestream.ToString().ToLower();
+
+                        Assert.True(output.Contains("standard"), "`GradeBook.UserInterfaces.StartingUserInterface` didn't create a gradebook when the `CreateCommand` included a name, type, and if it was weighted (true / false).");
+                    }
+                }
+            }
+            finally
+            {
+                StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput());
+                Console.SetOut(standardOutput);
+                StreamReader standardInput = new StreamReader(Console.OpenStandardInput());
+                Console.SetIn(standardInput);
+            }
         }
     }
 }
