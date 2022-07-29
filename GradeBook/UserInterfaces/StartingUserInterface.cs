@@ -1,4 +1,4 @@
-using GradeBook.GradeBooks;
+﻿using GradeBook.GradeBooks;
 using System;
 
 namespace GradeBook.UserInterfaces
@@ -39,26 +39,21 @@ namespace GradeBook.UserInterfaces
                 Console.WriteLine("Command not valid, Create requires a name, type of gradebook, if it's weighted (true / false).");
                 return;
             }
-            var name = parts[1];
-            var type = parts[2];
-
-            var weighted = false;
-            if (parts[3] == "true")
-                weighted = true;
-
-            BaseGradeBook gradeBook;
-            if (type == "standard")
-                gradeBook = new StandardGradeBook(name, weighted);
-            if (type == "ranked")
-                gradeBook = new RankedGradeBook(name, weighted);
+            var name = parts[3];
+            bool isWeighted = bool.Parse(parts[3]);
+            if(parts[2].Equals("standard"))
+            {
+                StandardGradeBook gradeBook = new StandardGradeBook(name, isWeighted);
+            }
+            else if (parts[2].Equals("ranked"))
+            {
+                RankedGradeBook gradeBook = new RankedGradeBook(name, isWeighted);
+            }
             else
             {
-                Console.WriteLine("{0} is not a supported type of gradebook, please try again", type);
-                return;
+                Console.WriteLine("Created gradebook {0}.", name + "is not a supported type of gradebook, please try again");
             }
 
-            Console.WriteLine("Created gradebook {0}.", name);
-            GradeBookUserInterface.CommandLoop(gradeBook);
         }
 
         public static void LoadCommand(string command)
